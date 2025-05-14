@@ -52,9 +52,9 @@ describe("JavaIntrospector", () => {
 
     const result = await introspector.extractMetadata("SomeFile.java");
 
-    expect(result.functions).toHaveLength(1);
-    expect(result.functions[0].name).toBe("getUser");
-    expect(result.functions[0].parameters[0].type).toBe("UUID");
+    expect(result.classes[0].methods).toHaveLength(1);
+    expect(result.classes[0].methods[0].name).toBe("getUser");
+    expect(result.classes[0].methods[0].parameters[0].type).toBe("UUID");
   });
 
   it("should throw if the Java process fails", async () => {
@@ -80,7 +80,7 @@ describe("JavaIntrospector", () => {
   });
 });
 
-describe.skip("JavaIntrospector CLI smoke test", () => {
+describe("JavaIntrospector CLI smoke test", () => {
   const javaCode = `
     public class HelloWorld {
       public String greet(String name) {
@@ -101,12 +101,13 @@ describe.skip("JavaIntrospector CLI smoke test", () => {
     } catch {}
   });
 
-  it("should extract method metadata from a real Java file", async () => {
+  it("should extract class and method metadata from a real Java file", async () => {
     const introspector = new JavaIntrospector();
     const result = await introspector.extractMetadata(filePath);
 
-    expect(result.functions.length).toBeGreaterThan(0);
-    expect(result.functions[0]).toMatchObject({
+    expect(result.classes.length).toBeGreaterThan(0);
+    expect(result.classes[0].methods.length).toBeGreaterThan(0);
+    expect(result.classes[0].methods[0]).toMatchObject({
       name: "greet",
       returnType: "String",
     });

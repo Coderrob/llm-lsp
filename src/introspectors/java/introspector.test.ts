@@ -3,7 +3,7 @@ import { JavaIntrospector } from "./introspector";
 import { jest } from "@jest/globals";
 import { tmpdir } from "os";
 import { randomUUID } from "crypto";
-import { writeFileSync } from "fs";
+import { unlinkSync, writeFileSync } from "fs";
 
 describe("JavaIntrospector", () => {
   let introspector: JavaIntrospector;
@@ -93,6 +93,12 @@ describe.skip("JavaIntrospector CLI smoke test", () => {
 
   beforeAll(() => {
     writeFileSync(filePath, javaCode);
+  });
+
+  afterAll(() => {
+    try {
+      unlinkSync(filePath);
+    } catch {}
   });
 
   it("should extract method metadata from a real Java file", async () => {

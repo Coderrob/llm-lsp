@@ -2,12 +2,9 @@ import { spawn } from "child_process";
 import { join } from "path";
 import { LanguageIntrospector, ParsedMetadata } from "../../types";
 
-const { log } = console;
-
 export class JavaIntrospector implements LanguageIntrospector {
   async extractMetadata(filePath: string): Promise<ParsedMetadata> {
     const parserDir = join(__dirname, "parser-cli");
-    log("parserDir", parserDir);
     const classpath = [
       parserDir,
       join(parserDir, "javaparser-core-3.25.7.jar"),
@@ -21,7 +18,6 @@ export class JavaIntrospector implements LanguageIntrospector {
 
       java.stdout.on("data", (data) => (stdout += data));
       java.stderr.on("data", (data) => (stderr += data));
-
       java.on("close", (code) => {
         if (code === 0) return resolve(stdout);
         reject(new Error(stderr));

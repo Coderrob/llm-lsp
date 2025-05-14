@@ -36,3 +36,7 @@ export interface ParsedMetadata {
 export interface LanguageIntrospector {
   extractMetadata(filePath: string): Promise<ParsedMetadata>;
 }
+
+export interface Formatter<T> {
+  format(): string;
+}
